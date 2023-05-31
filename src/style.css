@@ -61,10 +61,10 @@ nav.sc-eeDRCY.kqWIVd.rdt_Pagination {
 }
 
 .css-13cymwt-control {
-    border: none;
+    border: none !important;
     background: #fff;
     padding: 6px;
-    border-radius: 10px;
+    border-radius: 10px !important;
     font-size: 13px;
     letter-spacing: 0.5px;
 }

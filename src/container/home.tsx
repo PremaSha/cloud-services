@@ -1,11 +1,12 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { TableProps, TableColumn } from 'react-data-table-component';
-import { allResources, getApplications, getResources, getResoucesByApplicationName } from "../services/cloudServices"
+import { allResources, getApplications, getResources, getResoucesByApplicationName, getResourcesByGroupName } from "../services/cloudServices"
 import { resources, resourceDetail, applicationName, resourcesName } from '../models/application'
 import { selectOption } from "../models/common"
 import Datatable from "../components/DataTable"
 import { DEFAULT_CURRENCY } from "../constants"
 import Select from 'react-select'
+import { Chart } from "react-google-charts";
 
 const Home = () => {
   const [data, setData] = useState<resources>([]);
@@ -119,16 +120,48 @@ const Home = () => {
       })
     setData(result)
   }
-// do the same for other one
+
+  const changeResources = async (name: selectOption) => {
+    const result = await getResourcesByGroupName(name.option)
+      .catch(error => {
+        console.error("failed to resurces", error)
+        return []
+      })
+    setData(result)
+  }
+const costData = [['Resource Group', 'Cost'], ...data.map(item => [item.ResourceGroup, item.Cost])];
+
+const locationData = [
+  ['Category', 'Value'],
+  ['US East', 50],
+  ['EU West', 30],
+];
 
   return (
     <div>
       {/* add dropdowns here by getting application and resouces api */}
       <div className="section-block">
         <Select options={application} className='applications m-r25' placeholder="Select Application" onChange={changeApplication} />
-        <Select options={resources} className='applications' placeholder="Select Resources" />
+        <Select options={resources} className='applications' placeholder="Select Resources" onChange={changeResources} />
       </div>
       <Datatable {...tableProps} className='shadow-blur'/>
+
+      <div className="cost">
+        <Chart
+          chartType="PieChart"
+          data={costData}
+          width={"100%"}
+          height={"400px"}
+        />
+      </div>
+      <div className="loaction">
+      <Chart
+          chartType="PieChart"
+          data={locationData}
+          width={"100%"}
+          height={"400px"}
+        />
+      </div>
     </div>
   );
 };
