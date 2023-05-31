@@ -12,7 +12,7 @@ export type resources = resourceDetail[]
 
 export interface resourceDetail {
     "ConsumedQuantity": number,
-    "Cost": number,
+    "Cost": string,
     "Date": string,
     "InstanceId": string,
     "MeterCategory": string,
